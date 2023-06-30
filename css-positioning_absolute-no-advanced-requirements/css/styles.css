@@ -37,7 +37,9 @@ main {
 
 .box--top-left {
   background-color: #aed6f1;
-  position: fixed;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .box--top-center {
@@ -51,7 +53,7 @@ main {
   background-color: #5dade2;
   position: absolute;
   top: 0;
-  right: 0
+  right: 0;
 }
 
 .box--center {
