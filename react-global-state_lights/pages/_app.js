@@ -28,12 +28,37 @@ export default function App({ Component, pageProps }) {
     );
   }
 
-  // console.log("lights: ", lights);
+  function handleAllOff() {
+    setLights(
+      lights.map((light) => {
+        return { ...light, isOn: false };
+      })
+    );
+  }
+
+  function handleAllOn() {
+    setLights(
+      lights.map((light) => {
+        return { ...light, isOn: true };
+      })
+    );
+  }
+
+  const numberOfLightsOn = lights.filter((light) => light.isOn).length;
+
+  const isDimmed = numberOfLightsOn === 0;
 
   return (
-    <Layout>
+    <Layout isDimmed={isDimmed}>
       <GlobalStyle />
-      <Component {...pageProps} lights={lights} onToggle={handleToggle} />
+      <Component
+        {...pageProps}
+        lights={lights}
+        onToggle={handleToggle}
+        numberOfLightsOn={numberOfLightsOn}
+        onAllOff={handleAllOff}
+        onAllOn={handleAllOn}
+      />
     </Layout>
   );
 }
