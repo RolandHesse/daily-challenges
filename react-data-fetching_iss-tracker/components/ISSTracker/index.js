@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import Controls from "../Controls/index";
 import Map from "../Map/index";
 import useSWR from "swr";
