@@ -1,24 +1,52 @@
 import styled from "styled-components";
 import Link from "next/link";
 import Layout from "../components/Layout";
+import useSWR from "swr";
+
+const fetcher = async (url) => {
+  const res = await fetch(url);
+  if (!res.ok) {
+    const error = new Error("An error occurred while fetching the data.");
+    error.info = await res.json();
+    error.status = res.status;
+    throw error;
+  }
+
+  return res.json();
+};
 
 export default function HomePage() {
+  const { data, error, isLoading } = useSWR(
+    `https://swapi.dev/api/people/`,
+    fetcher
+  );
+
+  if (error) return <div>{error.message}</div>;
+  if (isLoading) return <div>loading...</div>;
+  console.log("data: ", data);
+
+  const characters = data.results;
+
+  const characterNamesAndIndices = characters.map((character, index) => ({
+    name: character.name,
+    index: index + 1,
+  }));
+
+  console.log("characterNamesAndIndices: ", characterNamesAndIndices);
+
   return (
     <Layout>
       <h1>React Data Fetching: Star Wars</h1>
       <List>
-        <li>
-          <StyledLink href="/characters/1">Luke Skywalker</StyledLink>
-        </li>
-        <li>
-          <StyledLink href="/characters/2">C-3PO</StyledLink>
-        </li>
-        <li>
-          <StyledLink href="/characters/3">R2-D2</StyledLink>
-        </li>
-        <li>
-          <StyledLink href="/characters/4">Darth Vader</StyledLink>
-        </li>
+        {characterNamesAndIndices.map((character) => {
+          return (
+            <li key={character.name}>
+              <StyledLink href={`/characters/${character.index}`}>
+                {character.name}
+              </StyledLink>
+            </li>
+          );
+        })}
       </List>
     </Layout>
   );
