@@ -15,6 +15,10 @@ export default function DetailsPage() {
   if (error) return <div>failed to load</div>;
   if (isLoading) return <div>loading...</div>;
 
+  if (data.status) {
+    return <h1>Page not found</h1>;
+  }
+
   return (
     <>
       <small>ID: {data.id}</small>
