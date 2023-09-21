@@ -8,7 +8,7 @@ export default function Product() {
   const { id } = router.query;
 
   const { data, isLoading } = useSWR(`/api/products/${id}`);
-
+  console.log("data: ", data);
   if (isLoading) {
     return <h1>Loading...</h1>;
   }
@@ -17,8 +17,6 @@ export default function Product() {
     return;
   }
 
-  console.log("data: ", data);
-
   return (
     <ProductCard>
       <h2>{data.name}</h2>
@@ -26,6 +24,20 @@ export default function Product() {
       <p>
         Price: {data.price} {data.currency}
       </p>
+      <h4>Reviews</h4>
+      {data.reviews.length > 0 ? (
+        data.reviews.map((review) => (
+          <article key={review._id}>
+            <p>
+              <strong>{review.title}</strong>
+            </p>
+            <p>{review.rating} / 5 ⭐️</p>
+            <p>{review.text}</p>
+          </article>
+        ))
+      ) : (
+        <p>No Reviews yet...</p>
+      )}
       <StyledLink href="/">Back to all</StyledLink>
     </ProductCard>
   );
